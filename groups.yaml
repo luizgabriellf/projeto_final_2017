@@ -68,6 +68,8 @@ door_alarm:
    entities:
      - sensor.living_room_door_state
      - switch.buzzer
+     - sensor.room_window_state
+
 kitchen:
    name: Kitchen
    entities:

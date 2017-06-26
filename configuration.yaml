@@ -120,41 +120,6 @@ sensor:
      - 'process_thread'
      - 'process_sleeping'
 
- - platform: mqtt
-   name: "temperature"
-   state_topic: "sensor/temperature"
-   qos: 0
-   unit_of_measurement: "ºC"
-   entity_id: "TEMP"
-
- - platform: mqtt
-   name: "humidity"  
-   state_topic: "sensor/humidity"
-   qos: 0
-   unit_of_measurement: "%"
- 
- - platform: mqtt
-   name: "gas"
-   state_topic: "sensor/infgas"
-   device_class: smoke   
-
- - platform: mqtt
-   name: "door"
-   state_topic: "sensor/door1"
-   device_class: door
-
- - platform: mqtt
-   name: "flame"
-   state_topic: "sensor/flame"
-   device_class: flame
-
- - platform: mqtt
-   name: "luminosity"
-   state_topic: "sensor/luz1"
-   visible: False
- - platform: mqtt
-   name: "water"
-   state_topic: "sensor/water"
    
  - platform: cpuspeed
    name: "cpuspeed"
@@ -187,7 +152,7 @@ switch:
    payload_on: "ARMED"
    payload_off: "DISARMED"
    false retain: true
-   entity_id: switch.Alarm 
+   entity_id: switch.alarm 
 
 
  -  platform: mqtt
@@ -271,17 +236,17 @@ automation:
    trigger: 
      - platform: state
        entity_id: sensor.living_room_door_state
-       state: '1'
+       to: '1'
      - platform: state
-       entity_id: sensor.living_room_window_state
-       state: '1'
+       entity_id: sensor.room_window_state
+       to: '1'
      - platform: state
        entity_id: sensor.living_room_pir_level
-       state: '1'
+       to: '1'
    condition: 
      - condition: state
        entity_id: switch.alarm
-       state: ARMED
+       state: 'on'
    action:
      - service: notify.notifygmail
        data:

@@ -1,0 +1,36 @@
+
+ sensor.living_room_temperature:
+    icon: mdi:thermometer
+
+ sensor.lum:
+    icon: mdi:lightbulb
+
+ sensor.living_room_humidity:
+    icon: mdi:water-percent
+
+ switch.fan:
+    icon: mdi:fan
+
+ sensor.living_room_light_level:
+    icon: mdi:lamp
+
+ sensor.kitchen_gas_level:
+    icon: mdi:alert-octagon
+
+ sensor.kitchen_flame_level:
+    icon: mdi:fire
+
+ sensor.kitchen_water_level:
+    icon: mdi:water
+
+ switch.buzzer:
+    icon: mdi:volume-high
+
+ sensor.living_room_door_state:
+    icon: mdi:glassdoor
+
+ group.all_automations:
+    hidden: false
+
+ sensor.living_room_pir_level:
+    icon: mdi:walk

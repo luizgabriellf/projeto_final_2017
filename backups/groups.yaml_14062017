@@ -1,0 +1,115 @@
+default_view:
+    name: Monitor
+    view: yes
+    icon: mdi:home
+    entities:
+      - group.monitor_sistema
+
+
+
+#living:
+#  name: Living
+#  view: yes
+#  icon: mdi:sofa
+#  entities:
+
+
+#camerastab:
+#system_view:
+#  name: Cameras
+#  view: yes
+#  entities:
+#    - camera.ArduCAM
+
+
+cozinha:
+    name: Cozinha
+    view: yes
+    icon: mdi:silverware-variant
+    entities:
+      - group.sensores_cozinha
+      - group.automacoes_cozinha
+
+bedrooms:
+    name: Bedrooms
+    view: yes
+    icon: mdi:hotel
+    entities:
+      - group.all_automations
+
+offices:
+  name: Office
+  view: yes
+  icon: mdi:desktop-mac
+  entities:
+
+living:
+  name: Livingroom
+  view: yes
+  icon: mdi:sofa
+  entities:
+
+garage:
+  name: Garage
+  view: yes
+  icon: mdi:car
+  entities:
+
+
+outdoors:
+  name: Garden
+  view: yes
+  icon: mdi:tree
+  entities:
+    - sensor.humidity
+
+
+
+
+
+
+#system_view:
+#  name: Automation
+#  view: yes
+#  entities:
+#    - group.all_automations
+
+
+
+#System Monitor
+
+monitor_sistema:
+    name: Monitor Sistema
+    entities:
+      - sensor.cpuspeed
+      - sensor.systemmonitor
+
+
+
+#COZINHA
+
+sensores_cozinha:
+    name: Sensores Cozinha
+    entities:
+      - sensor.humidity
+      - sensor.temperature
+      - sensor.gas
+      - sensor.flame
+      - sensor.luminosity
+      - sensor.water
+
+automacoes_cozinha:
+    name: Automações Cozinha
+    entities:
+      - switch.Lamp
+      - switch.Fan
+     
+
+
+
+
+
+#alarm:
+#    name: Alarm
+#    entities:
+#      - sensor.door

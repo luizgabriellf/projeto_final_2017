@@ -1,0 +1,21 @@
+camerastab:
+  name: Cameras
+  view: yes
+  entities:
+    - camera.ArduCAM
+
+
+weather:
+    name: Weather
+    entities:
+      - sensor.Humidity
+      - sensor.Temperature
+      - sensor.Inflamable_Gas
+      - sensor.flame
+
+
+door:
+    name: Door
+    entities:
+      - sensor.Front_DOOR
+      - sensor.WINDOW

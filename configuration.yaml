@@ -1,0 +1,444 @@
+homeassistant:
+# Name of the location where Home Assistant is running
+  name: SmartHome Anytime Anywhere
+  # Location required to calculate the time the sun rises and sets
+  latitude: 39.7477
+  longitude: -8.805
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 35
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Lisbon
+
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_password
+  cors_allowed_origins: 
+    - http://10.0.2.1:3000  
+    - http://192.168.246.149:3000
+    - http://10.20.228.20:3000
+# Uncomment this if you are using SSL or running in Docker etc
+  #  base_url: :192.168.0.110:8123
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# View all events in a logbook
+#logbook:
+
+# Track the sun
+#sun:
+
+#sensor:
+#  platform: yr
+
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://192.168.1.71:8081
+    name: PiCam
+    framerate: 10   
+
+zone:
+  name: Home
+  latitude: 39.735681
+  longitude: -8.821502
+  radius: 50
+  icon: mdi:home
+
+zone 1:
+  name: IPL_ESTG
+  latitude: 39.734458
+  longitude: -8.821057
+  radius: 200
+  icon: mdi:school
+
+
+
+notify:
+  - name: notifygmail
+    platform: smtp
+    server: smtp.gmail.com
+    port: 587
+    timeout: 15
+    sender: smarthomeplatformnotify@gmail.com
+    starttls: true
+    username: smarthomeplatformnotify@gmail.com
+    password: modulo2modulo2
+    recipient:
+      - smarthomeplatformnotify@gmail.com
+    sender_name: 'Smart'
+
+#MQTT config
+mqtt:
+  broker: 127.0.0.1
+  username: modulo2
+  password: modulo2
+  discovery: true
+  discovery_prefix: homeassistant
+
+
+
+sensor:
+
+ - platform: glances
+   host: 127.0.0.1 
+   resources:
+     - 'disk_use_percent'
+     - 'disk_use'
+     - 'disk_free'
+     - 'memory_use_percent'
+     - 'memory_use'
+     - 'memory_free'
+     - 'swap_use_percent'
+     - 'swap_use'
+     - 'swap_free'
+     - 'processor_load'
+     - 'process_running'
+     - 'process_total'
+     - 'process_thread'
+     - 'process_sleeping'
+
+ - platform: mqtt
+   name: "temperature"
+   state_topic: "sensor/temperature"
+   qos: 0
+   unit_of_measurement: "ºC"
+   entity_id: "TEMP"
+
+ - platform: mqtt
+   name: "humidity"  
+   state_topic: "sensor/humidity"
+   qos: 0
+   unit_of_measurement: "%"
+ 
+ - platform: mqtt
+   name: "gas"
+   state_topic: "sensor/infgas"
+   device_class: smoke   
+
+ - platform: mqtt
+   name: "door"
+   state_topic: "sensor/door1"
+   device_class: door
+
+ - platform: mqtt
+   name: "flame"
+   state_topic: "sensor/flame"
+   device_class: flame
+
+ - platform: mqtt
+   name: "luminosity"
+   state_topic: "sensor/luz1"
+   visible: False
+ - platform: mqtt
+   name: "water"
+   state_topic: "sensor/water"
+   
+ - platform: cpuspeed
+   name: "cpuspeed"
+
+ - platform: systemmonitor
+   resources:
+     - type: disk_use_percent
+     - type: memory_free
+
+
+
+#Relay
+
+switch:
+ -  platform: mqtt
+    name: "Lamp"
+    state_topic: "switch/lamp"
+    command_topic: "switch/lamp"
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic:
+    false retain: true
+    entity_id: switch.Lamp
+
+ - platform: mqtt
+   name: "Alarm"
+   state_topic: "sensor/RFID"
+   command_topic: "sensor/RFID"
+   payload_on: "ARMED"
+   payload_off: "DISARMED"
+   false retain: true
+   entity_id: switch.Alarm 
+
+
+ -  platform: mqtt
+    name: "Fan"
+    state_topic: "switch/fan"
+    command_topic: "switch/fan"
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic:
+    false retain: true
+    entity_id: switch.fan
+
+ -  platform: mqtt
+    name: "Bomba"
+    state_topic: "ha/switch3"
+    command_topic: "ha/switch3"
+    qos: 0 
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic:
+    false retain: true
+
+
+ -  platform: mqtt
+    name: "Buzzer"
+    state_topic: "ha/buzzer1"
+    command_topic: "ha/buzzer1"
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic:
+    false retain: true
+
+# Text to speech
+tts:
+  - platform: google
+    cache: true
+    cache_dir: /home/homeassistant/.homeassistant/tts
+    time_memory: 300
+    language: 'pt'
+
+media_player:
+  - platform: vlc
+    name: speaker_1
+    #arguments: '--alsa-audio-device=hw:1,0'
+
+
+automation:
+ - alias: turn_ON_FAN
+   condition:  
+     - condition: state
+       entity_id: switch.Fan
+       state: 'off' 
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.temperature
+     above: 25
+   action: 
+     - service: notify.notifygmail
+       data:
+         message: "Turn on Fan!"  
+     - service: tts.google_say
+       data:
+         message: "A ventoinha foi ligada"
+
+
+
+ - alias: tomar_mediacamento
+   trigger:
+     platform: time
+     after: '22:20:00'
+   action:
+     - service: tts.google_say
+       data:
+         message: "Atenção! Hora de tomar a medicação para a tensão arterial"
+
+
+
+ - alias:  Trigger Alarm Away Home
+   trigger: 
+     - platform: state
+       entity_id: sensor.living_room_door_state
+       state: '1'
+     - platform: state
+       entity_id: sensor.living_room_window_state
+       state: '1'
+     - platform: state
+       entity_id: sensor.living_room_pir_level
+       state: '1'
+   condition: 
+     - condition: state
+       entity_id: switch.alarm
+       state: ARMED
+   action:
+     - service: notify.notifygmail
+       data:
+         message: "Intrusion Detected"
+     - service: homeassistant.turn_on
+       entity_id: switch.Buzzer
+     - event: alert
+       event_data:
+         message: "Intrusion Detected"        
+
+
+
+
+
+
+ 
+ - alias: turn_ON_Fan
+   condition:
+     - condition: state
+       entity_id: switch.Fan
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.temperature
+     above: 25
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.Fan
+   
+
+ - alias: turn_OFF_FAN
+   condition:
+     - condition: state
+       entity_id: switch.Fan
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.temperature
+     below: 24
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.Fan
+
+
+
+ - alias: Door_Alarm
+   trigger:
+     platform: state
+     entity_id: sensor.door
+     state: 'Door OPENED'
+   action:
+     service: homeassistant.turn_on
+     entity_id: switch.Buzzer
+
+
+ - alias: Send message at a given time
+   trigger:
+     platform: state
+     entity_id: "sensor.Humidity"
+     state: 'ON'
+   action:
+     - event: alert     
+       event_data:
+         message: "Fire detected!"
+
+ - alias: Door Alarm OFF
+   trigger:
+     platform: state
+     entity_id: sensor.door
+     state: 'Door CLOSED'
+   action:
+     service: homeassistant.turn_off
+     entity_id: switch.Buzzer
+
+
+ - alias: Lum_ON
+   trigger: 
+     platform: state
+     entity_id: sensor.luminosity
+     state: 'OFF'
+   action:
+     service: homeassistant.turn_on
+     entity_id: switch.Lamp
+
+
+ - alias: Lum_OFF
+   trigger:
+     platform: state
+     entity_id: sensor.luminosity
+     state: 'ON'
+   action:
+     service: homeassistant.turn_off
+     entity_id: switch.Lamp
+
+ - alias: Flame_Alarm
+   trigger:
+     platform: state
+     entity_id: sensor.flame
+     state: 'FIRE DETECTED'
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.Buzzer
+     - event: alert
+       event_data:
+         message: "Fire detected!" 
+     - service: notify.notifygmail
+       data:
+         message: "Fire detected in the Smart Home"  
+
+ - alias: Flame_Alarm_OFF
+   trigger:
+     platform: state
+     entity_id: sensor.flame
+     state: 'NO FIRE'
+   action:
+     service: homeassistant.turn_off
+     entity_id: switch.buzzer
+
+ - alias: Water_Alarm
+   trigger:
+     platform: state
+     entity_id: sensor.water
+     state: 'Water DETECTED'
+   action:
+     service: homeassistant.turn_on
+     entity_id: switch.buzzer
+
+ - alias: Water_Alarm_OFF
+   trigger:
+     platform: state
+     entity_id: sensor.water
+     state: 'No Water'
+   action:
+     service: homeassistant.turn_off
+     entity_id: switch.buzzer
+
+ - alias: Gas_Alarm
+   trigger:
+     platform: state
+     entity_id: sensor.gas
+     state: 'Gas DETECTED'
+   action:
+     service: homeassistant.turn_on
+     entity_id: switch.buzzer
+
+ - alias: Gas_Alarm_OFF
+   trigger: 
+     platform: state
+     entity_id: sensor.gas
+     state: 'Air Safe'
+   action:
+     service: homeassistant.turn_off
+     entity_id: switch.buzzer
+
+
+
+
+
+
+#group: !include groups.yaml

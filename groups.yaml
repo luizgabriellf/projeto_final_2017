@@ -1,0 +1,93 @@
+default_view:
+   name: Interior
+   view: yes
+   icon: mdi:home-assistant
+   entities:
+     - group.all_automations
+     - group.living_room
+     - group.kitchen
+     - group.door_alarm
+     - group.alarm
+     - switch.lamp
+     - switch.fan
+     - camera.PiCam
+
+alarm:
+  name: Alarm
+  entities:
+    - switch.alarm
+outdoors:
+  name: Exterior 
+  view: yes
+  icon: mdi:tree
+  entities:
+    - sensor.humidity
+
+monitor:
+   name: Monitor
+   view: yes
+   icon: mdi:wrench
+   entities:
+      - group.monitor_sistema
+
+
+
+
+#System Monitor
+
+monitor_sistema:
+    name: Monitor Sistema
+    entities:
+      - sensor.glances_cpu_load
+      - sensor.glances_disk_free
+      - sensor.glances_disk_use
+      - sensor.glances_disk_use_2
+      - sensor.glances_ram_free
+      - sensor.glances_ram_use
+      - sensor.glances_ram_use_2
+      - sensor.glances_running
+      - sensor.glances_sleeping
+      - sensor.glances_swap_free
+      - sensor.glances_swap_use
+      - sensor.glances_swap_use_2
+      - sensor.glances_thread
+      - sensor.glances_total
+
+
+living_room:
+   name: Living Room
+   entities:
+     - sensor.living_room_pir_level
+     - sensor.living_room_temperature
+     - sensor.living_room_humidity
+     - sensor.living_room_light_level
+
+
+door_alarm:
+   name: door alarm
+   entities:
+     - sensor.living_room_door_state
+     - switch.buzzer
+kitchen:
+   name: Kitchen
+   entities:
+     - sensor.kitchen_flame_level
+     - sensor.kitchen_gas_level
+     - sensor.kitchen_water_level
+
+
+automacoes_cozinha:
+    name: Automações Cozinha
+    entities:
+      - switch.Lamp
+      - switch.Fan
+     
+
+
+
+
+
+#alarm:
+#    name: Alarm
+#    entities:
+#      - sensor.door

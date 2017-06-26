@@ -85,7 +85,7 @@ notify:
     sender: smarthomeplatformnotify@gmail.com
     starttls: true
     username: smarthomeplatformnotify@gmail.com
-    password: modulo2modulo2
+    password: !secret mail_password
     recipient:
       - smarthomeplatformnotify@gmail.com
     sender_name: 'Smart'
@@ -441,4 +441,4 @@ automation:
 
 
 
-#group: !include groups.yaml
+group: !include groups.yaml

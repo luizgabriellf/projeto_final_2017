@@ -28,7 +28,7 @@ http:
   api_password: !secret http_password
   cors_allowed_origins: 
     - http://10.0.2.1:3000  
-    - http://192.168.246.149:3000
+    - http://192.168.1.72:3000
     - http://10.20.228.20:3000
 # Uncomment this if you are using SSL or running in Docker etc
   #  base_url: :192.168.0.110:8123
@@ -56,7 +56,7 @@ history:
 
 camera:
   - platform: mjpeg
-    mjpeg_url: http://192.168.1.71:8081
+    mjpeg_url: http://192.168.1.163:8081
     name: PiCam
     framerate: 10   
 
@@ -65,15 +65,7 @@ zone:
   latitude: 39.735681
   longitude: -8.821502
   radius: 50
-  icon: mdi:home
-
-zone 1:
-  name: IPL_ESTG
-  latitude: 39.734458
-  longitude: -8.821057
-  radius: 200
-  icon: mdi:school
-
+  icon: mdi:home 
 
 
 notify:
@@ -202,7 +194,7 @@ media_player:
 
 
 automation:
- - alias: turn_ON_FAN
+ - alias: Turn ON FAN
    condition:  
      - condition: state
        entity_id: switch.Fan
@@ -221,7 +213,7 @@ automation:
 
 
 
- - alias: tomar_mediacamento
+ - alias: Tomar Mediacamento
    trigger:
      platform: time
      after: '22:20:00'
@@ -257,13 +249,8 @@ automation:
        event_data:
          message: "Intrusion Detected"        
 
-
-
-
-
-
  
- - alias: turn_ON_Fan
+ - alias: Turn ON Fan
    condition:
      - condition: state
        entity_id: switch.Fan
@@ -277,7 +264,7 @@ automation:
        entity_id: switch.Fan
    
 
- - alias: turn_OFF_FAN
+ - alias: Turn OFF FAN
    condition:
      - condition: state
        entity_id: switch.Fan
@@ -292,7 +279,7 @@ automation:
 
 
 
- - alias: Door_Alarm
+ - alias: Door Alarm
    trigger:
      platform: state
      entity_id: sensor.door
@@ -322,7 +309,7 @@ automation:
      entity_id: switch.Buzzer
 
 
- - alias: Lum_ON
+ - alias: Lum ON
    trigger: 
      platform: state
      entity_id: sensor.luminosity
@@ -332,7 +319,7 @@ automation:
      entity_id: switch.Lamp
 
 
- - alias: Lum_OFF
+ - alias: Lum OFF
    trigger:
      platform: state
      entity_id: sensor.luminosity
@@ -341,7 +328,7 @@ automation:
      service: homeassistant.turn_off
      entity_id: switch.Lamp
 
- - alias: Flame_Alarm
+ - alias: Flame Alarm
    trigger:
      platform: state
      entity_id: sensor.flame
@@ -356,7 +343,7 @@ automation:
        data:
          message: "Fire detected in the Smart Home"  
 
- - alias: Flame_Alarm_OFF
+ - alias: Flame Alarm OFF
    trigger:
      platform: state
      entity_id: sensor.flame
@@ -365,7 +352,7 @@ automation:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
 
- - alias: Water_Alarm
+ - alias: Water Alarm
    trigger:
      platform: state
      entity_id: sensor.water
@@ -374,7 +361,7 @@ automation:
      service: homeassistant.turn_on
      entity_id: switch.buzzer
 
- - alias: Water_Alarm_OFF
+ - alias: Water Alarm OFF
    trigger:
      platform: state
      entity_id: sensor.water
@@ -383,7 +370,7 @@ automation:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
 
- - alias: Gas_Alarm
+ - alias: Gas Alarm
    trigger:
      platform: state
      entity_id: sensor.gas
@@ -392,7 +379,7 @@ automation:
      service: homeassistant.turn_on
      entity_id: switch.buzzer
 
- - alias: Gas_Alarm_OFF
+ - alias: Gas Alarm OFF
    trigger: 
      platform: state
      entity_id: sensor.gas
@@ -401,9 +388,15 @@ automation:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
 
-
-
-
-
+ - alias: PanicButton
+   trigger:
+     platform: state
+     entity_id: binary_sensor.panic_button
+     from: 'off'
+     to: 'on'
+   action:
+     - service: tts.google_say
+       data:
+         message: "Ai ai ai que estou morrendo"
 
 group: !include groups.yaml

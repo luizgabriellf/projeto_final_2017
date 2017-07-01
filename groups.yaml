@@ -10,48 +10,106 @@ default_view:
      - group.alarm
      - switch.lamp
      - switch.fan
-     - camera.PiCam
+     - camera.ExteriorZone1
 
 alarm:
   name: Alarm
   entities:
     - switch.alarm
+
+
 outdoors:
   name: Exterior 
   view: yes
   icon: mdi:tree
   entities:
-    - sensor.humidity
+    - group.irrigation
+    - group.mailbox
+    - group.doorbutton
+    - group.gate
+    - group.wateralert
 
 monitor:
    name: Monitor
    view: yes
    icon: mdi:wrench
    entities:
-      - group.monitor_sistema
+      - group.monitor_cpu
+      - group.monitor_mem
+      - group.monitor_swap
+      - group.monitor_disk
 
+irrigation:
+   name: Irrigation Module
+   entities:
+     - switch.eletrovalve_switch
+     - switch.culture1_switch
+     - switch.culture2_switch
+     - switch.culture3_switch
+     - switch.plant1_switch
+     - sensor.exterior_humidity
+     - sensor.exterior_temperature
+     - sensor.soil_temperature
+     - sensor.soil_humidity    
 
+mailbox:
+   name: Mailbox Module
+   entities:
+     - sensor.mailbox
 
+wateralert:
+   name: Water Leak Module
+   entities:
+     - sensor.waterflow
+
+gate:
+   name: Gate Module
+   entities:
+     - switch.servo_gate
+
+doorbutton:
+   name: Door Module
+   entities:
+     - binary_sensor.doorbutton
+
+exteriorcam:
+   name: Security Cam Module
+   entities:
+     - camera.ExteriorZone1
 
 #System Monitor
 
-monitor_sistema:
-    name: Monitor Sistema
-    entities:
-      - sensor.glances_cpu_load
-      - sensor.glances_disk_free
-      - sensor.glances_disk_use
-      - sensor.glances_disk_use_2
-      - sensor.glances_ram_free
-      - sensor.glances_ram_use
-      - sensor.glances_ram_use_2
-      - sensor.glances_running
-      - sensor.glances_sleeping
-      - sensor.glances_swap_free
-      - sensor.glances_swap_use
-      - sensor.glances_swap_use_2
-      - sensor.glances_thread
-      - sensor.glances_total
+
+monitor_mem:
+   name: System Memory
+   entities:
+     - sensor.glances_ram_free
+     - sensor.glances_ram_use
+     - sensor.glances_ram_use_2
+
+monitor_swap:
+   name: System Swap
+   entities:
+     - sensor.glances_swap_free
+     - sensor.glances_swap_use
+     - sensor.glances_swap_use_2      
+
+monitor_cpu:
+   name: System CPU
+   entities:
+     - sensor.glances_cpu_load
+     - sensor.glances_thread
+     - sensor.glances_running
+     - sensor.glances_sleeping
+     - sensor.glances_total
+
+monitor_disk:
+   name: System Disk
+   entities:
+     - sensor.glances_disk_free
+     - sensor.glances_disk_use
+     - sensor.glances_disk_use_2 
+
 
 
 living_room:
@@ -74,7 +132,7 @@ kitchen:
    name: Kitchen
    entities:
      - sensor.kitchen_flame_level
-     - sensor.kitchen_gas_level
+     - sensor.kitchen_gas_presence
      - sensor.kitchen_water_level
 
 
@@ -82,14 +140,4 @@ automacoes_cozinha:
     name: Automações Cozinha
     entities:
       - switch.Lamp
-      - switch.Fan
-     
-
-
-
-
-
-#alarm:
-#    name: Alarm
-#    entities:
-#      - sensor.door
+      - switch.Fire

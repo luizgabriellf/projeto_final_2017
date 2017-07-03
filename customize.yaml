@@ -1,3 +1,4 @@
+########### Indoor ##############
 
  sensor.living_room_temperature:
     icon: mdi:thermometer
@@ -34,3 +35,46 @@
 
  sensor.living_room_pir_level:
     icon: mdi:walk
+
+########### Outdoor ##############
+
+ sensor.exterior_humidity:
+    icon: mdi:water-percent
+
+ sensor.exterior_temperature:
+    icon: mdi:thermometer
+
+ sensor.soil_temperature:
+    icon: mdi:thermometer-lines
+
+ sensor.soil_humidity:
+    icon: mdi:water-percent
+
+######## Config/Status ###########
+
+ sensor.glances_swap_free:
+    icon: mdi:memory
+ sensor.glances_swap_use:
+    icon: mdi:memory
+ sensor.glances_swap_use_2:
+    icon: mdi:memory
+
+ sensor.glances_cpu_load:
+    icon: mdi:pulse
+ sensor.glances_thread:
+    icon: mdi:pulse
+ sensor.glances_running:
+    icon: mdi:pulse
+ sensor.glances_sleeping:
+    icon: mdi:pulse
+ sensor.glances_total:
+    icon: mdi:pulse
+
+ sensor.glances_disk_free:
+    icon: mdi:disk
+ sensor.glances_disk_use:
+    icon: mdi:disk
+ sensor.glances_disk_use_2:
+    icon: mdi:disk
+
+

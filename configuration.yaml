@@ -149,8 +149,8 @@ switch:
 
  -  platform: mqtt
     name: "Fan"
-    state_topic: "switch/fan"
-    command_topic: "switch/fan"
+    state_topic: "ha/switch4"
+    command_topic: "ha/switch4"
     qos: 0
     payload_on: "ON"
     payload_off: "OFF"
@@ -398,5 +398,156 @@ automation:
      - service: tts.google_say
        data:
          message: "Ai ai ai que estou morrendo"
+
+ - alias: Turn ON BATATAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     below: 30
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn OFF BATATAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     above: 70
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.eletrovalve_switch
+
+   
+ - alias: Turn ON CEBOLAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     below: 30
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn OFF CEBOLAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     above: 70
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn ON TOMATES
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     below: 30
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn OFF TOMATES
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     above: 70
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn ON MELANCIA
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     below: 10
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn OFF MELANCIA
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     above: 30
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn ON ORQUIDEAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'off'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     below: 10
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.eletrovalve_switch
+
+ - alias: Turn OFF ORQUIDEAS
+   condition:
+     - condition: state
+       entity_id: switch.eletrovalve_switch
+       state: 'on'
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.soil_humidity
+     above: 30
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.eletrovalve_switch
+ 
+ - alias: MAILBOX ALERT
+   trigger:
+     platform: state
+     entity_id: sensor.mail
+     state: '1'
+   action:
+     - service: notify.notifygmail
+       data:
+         message: "You got mail!!!"
+
+ - alias: DOOR ALERT
+   trigger:
+     platform: state
+     entity_id: sensor.doorbutton
+     state: '1'
+   action:
+     - service: notify.notifygmail
+       data:
+         message: "Home Entrance Door!!!"
 
 group: !include groups.yaml

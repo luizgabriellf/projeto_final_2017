@@ -9,7 +9,7 @@ default_view:
      - group.door_alarm
      - group.alarm
      - switch.lamp
-     - switch.fan
+     - switch.living_room_ventilation
      - camera.ExteriorZone1
 
 alarm:

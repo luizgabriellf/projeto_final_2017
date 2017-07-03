@@ -15,7 +15,7 @@
  sensor.living_room_light_level:
     icon: mdi:lamp
 
- sensor.kitchen_gas_level:
+ sensor.kitchen_gas_presence:
     icon: mdi:alert-octagon
 
  sensor.kitchen_flame_level:
@@ -36,7 +36,22 @@
  sensor.living_room_pir_level:
     icon: mdi:walk
 
+ switch.living_room_ventilation:
+    icon: mdi:fan
+
+ switch.lamp:
+    icon: mdi:ceiling-light
+
+ switch.alarm:
+    icon: mdi:alarm-light
+
+ sensor.room_window_state:
+    icon: mdi:window-open
+
 ########### Outdoor ##############
+
+ camera.PiCam:
+    icon: camcorder
 
  sensor.exterior_humidity:
     icon: mdi:water-percent
@@ -50,6 +65,17 @@
  sensor.soil_humidity:
     icon: mdi:water-percent
 
+ switch.eletrovalve_switch:
+    icon: mdi:water-pump
+
+ sensor.waterflow:
+    icon: mdi:waves
+
+ switch.servo_gate:
+    icon: mdi:garage-open
+
+
+
 ######## Config/Status ###########
 
  sensor.glances_swap_free:
@@ -58,6 +84,14 @@
     icon: mdi:memory
  sensor.glances_swap_use_2:
     icon: mdi:memory
+
+ sensor.glances_ram_free:
+    icon: mdi:memory
+ sensor.glances_ram_use:
+    icon: mdi:memory
+ sensor.glances_ram_use_2:
+    icon: mdi:memory
+
 
  sensor.glances_cpu_load:
     icon: mdi:pulse
@@ -76,5 +110,3 @@
     icon: mdi:disk
  sensor.glances_disk_use_2:
     icon: mdi:disk
-
-

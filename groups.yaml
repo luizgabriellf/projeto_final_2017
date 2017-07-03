@@ -3,14 +3,13 @@ default_view:
    view: yes
    icon: mdi:home-assistant
    entities:
-     - group.all_automations
      - group.living_room
      - group.kitchen
      - group.door_alarm
      - group.alarm
      - switch.lamp
      - switch.living_room_ventilation
-     - camera.ExteriorZone1
+ 
 
 alarm:
   name: Alarm
@@ -23,6 +22,7 @@ outdoors:
   view: yes
   icon: mdi:tree
   entities:
+    - group.exteriorcam
     - group.irrigation
     - group.mailbox
     - group.doorbutton
@@ -38,6 +38,9 @@ monitor:
       - group.monitor_mem
       - group.monitor_swap
       - group.monitor_disk
+      - group.all_automations
+
+
 
 irrigation:
    name: Irrigation Module
@@ -47,10 +50,11 @@ irrigation:
      - switch.culture2_switch
      - switch.culture3_switch
      - switch.plant1_switch
-     - sensor.exterior_humidity
      - sensor.exterior_temperature
+     - sensor.exterior_humidity
      - sensor.soil_temperature
-     - sensor.soil_humidity    
+     - sensor.soil_humidity
+
 
 mailbox:
    name: Mailbox Module
@@ -75,7 +79,7 @@ doorbutton:
 exteriorcam:
    name: Security Cam Module
    entities:
-     - camera.ExteriorZone1
+     - camera.PiCam
 
 #System Monitor
 
@@ -120,13 +124,12 @@ living_room:
      - sensor.living_room_humidity
      - sensor.living_room_light_level
 
-
 door_alarm:
    name: door alarm
    entities:
      - sensor.living_room_door_state
      - switch.buzzer
-     - sensor.room_window_state
+     - sensor.living_room_window_state
 
 kitchen:
    name: Kitchen

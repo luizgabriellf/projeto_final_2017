@@ -146,39 +146,6 @@ switch:
    false retain: true
    entity_id: switch.alarm 
 
-
- -  platform: mqtt
-    name: "Fan"
-    state_topic: "ha/switch4"
-    command_topic: "ha/switch4"
-    qos: 0
-    payload_on: "ON"
-    payload_off: "OFF"
-    optimistic:
-    false retain: true
-    entity_id: switch.fan
-
- -  platform: mqtt
-    name: "Bomba"
-    state_topic: "ha/switch3"
-    command_topic: "ha/switch3"
-    qos: 0 
-    payload_on: "ON"
-    payload_off: "OFF"
-    optimistic:
-    false retain: true
-
-
- -  platform: mqtt
-    name: "Buzzer"
-    state_topic: "ha/buzzer1"
-    command_topic: "ha/buzzer1"
-    qos: 0
-    payload_on: "ON"
-    payload_off: "OFF"
-    optimistic:
-    false retain: true
-
 # Text to speech
 tts:
   - platform: google
@@ -197,7 +164,7 @@ automation:
  - alias: Turn ON FAN
    condition:  
      - condition: state
-       entity_id: switch.Fan
+       entity_id: switch.living_room_ventilation
        state: 'off' 
    trigger:
      platform: numeric_state
@@ -249,71 +216,49 @@ automation:
        event_data:
          message: "Intrusion Detected"        
 
+
+ - alias: Turn OFF ALARM
+   trigger:
+     - platform: state
+       entity_id: switch.alarm
+       state: 'off'
+   action:
+     - service: homeassistant.turn_off
+       entity_id: switch.buzzer 
  
  - alias: Turn ON Fan
    condition:
      - condition: state
-       entity_id: switch.Fan
-       state: 'off'
+       entity_id: switch.living_room_ventilation
+       state: '0'
    trigger:
      platform: numeric_state
-     entity_id: sensor.temperature
+     entity_id: sensor.living_room_temperature
      above: 25
    action:
      - service: homeassistant.turn_on
-       entity_id: switch.Fan
+       entity_id: switch.living_room_ventilation
    
 
  - alias: Turn OFF FAN
    condition:
      - condition: state
-       entity_id: switch.Fan
-       state: 'on'
+       entity_id: switch.living_room_ventilation
+       state: '1'
    trigger:
      platform: numeric_state
-     entity_id: sensor.temperature
+     entity_id: sensor.living_room_temperature
      below: 24
    action:
      - service: homeassistant.turn_off
-       entity_id: switch.Fan
-
-
-
- - alias: Door Alarm
-   trigger:
-     platform: state
-     entity_id: sensor.door
-     state: 'Door OPENED'
-   action:
-     service: homeassistant.turn_on
-     entity_id: switch.Buzzer
-
-
- - alias: Send message at a given time
-   trigger:
-     platform: state
-     entity_id: "sensor.Humidity"
-     state: 'ON'
-   action:
-     - event: alert     
-       event_data:
-         message: "Fire detected!"
-
- - alias: Door Alarm OFF
-   trigger:
-     platform: state
-     entity_id: sensor.door
-     state: 'Door CLOSED'
-   action:
-     service: homeassistant.turn_off
-     entity_id: switch.Buzzer
+       entity_id: switch.living_room_ventilation
 
 
  - alias: Lum ON
    trigger: 
      platform: state
-     entity_id: sensor.luminosity
-     state: 'OFF'
+     entity_id: sensor.living_room_light_level
+     state: 'DARK'
    action:
      service: homeassistant.turn_on
      entity_id: switch.Lamp
@@ -322,17 +267,17 @@ automation:
  - alias: Lum OFF
    trigger:
      platform: state
-     entity_id: sensor.luminosity
-     state: 'ON'
+     entity_id: sensor.living_room_light_level
+     state: 'Light'
    action:
      service: homeassistant.turn_off
-     entity_id: switch.Lamp
+     entity_id: switch.lamp
 
  - alias: Flame Alarm
    trigger:
      platform: state
-     entity_id: sensor.flame
-     state: 'FIRE DETECTED'
+     entity_id: sensor.kitchen_flame_level
+     state: 'FIRE'
    action:
      - service: homeassistant.turn_on
        entity_id: switch.Buzzer
@@ -346,8 +291,8 @@ automation:
  - alias: Flame Alarm OFF
    trigger:
      platform: state
-     entity_id: sensor.flame
-     state: 'NO FIRE'
+     entity_id: sensor.kitchen_flame_level
+     state: 'Air Safe'
    action:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
@@ -355,34 +300,50 @@ automation:
  - alias: Water Alarm
    trigger:
      platform: state
-     entity_id: sensor.water
-     state: 'Water DETECTED'
+     entity_id: sensor.kitchen_water_level
+     state: 'FLOOD'
    action:
-     service: homeassistant.turn_on
-     entity_id: switch.buzzer
+     - service: homeassistant.turn_on
+       entity_id: switch.buzzer
+     - event: alert
+       event_data:
+         message: "Water Detected"
+     - service: notify.notifygmail
+       data:
+         message: "Water detected in the Smart Home"
+
 
  - alias: Water Alarm OFF
    trigger:
      platform: state
-     entity_id: sensor.water
-     state: 'No Water'
+     entity_id: sensor.kitchen_water_level
+     state: 'dry      '
    action:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
+    
 
  - alias: Gas Alarm
    trigger:
      platform: state
-     entity_id: sensor.gas
-     state: 'Gas DETECTED'
+     entity_id: sensor.kitchen_gas_presence
+     state: 'GAS DETECTED'
    action:
-     service: homeassistant.turn_on
-     entity_id: switch.buzzer
+     - service: homeassistant.turn_on
+       entity_id: switch.buzzer
+     - event: alert
+       event_data:
+         message: "Gas Detected"
+     - service: notifty.notifygmail
+       data: 
+         message: "Gas Detected in the Smart Home"
+    
+
 
  - alias: Gas Alarm OFF
    trigger: 
      platform: state
-     entity_id: sensor.gas
+     entity_id: sensor.kitchen_gas_presence
      state: 'Air Safe'
    action:
      service: homeassistant.turn_off
@@ -397,7 +358,7 @@ automation:
    action:
      - service: tts.google_say
        data:
-         message: "Ai ai ai que estou morrendo"
+         message: "SOCORRO SOCORRO AJUDA-ME"
 
  - alias: Turn ON BATATAS
    condition:

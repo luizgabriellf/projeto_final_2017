@@ -168,26 +168,21 @@ automation:
        state: 'off' 
    trigger:
      platform: numeric_state
-     entity_id: sensor.temperature
+     entity_id: sensor.living_room_temperature
      above: 25
    action: 
-     - service: notify.notifygmail
-       data:
-         message: "Turn on Fan!"  
-     - service: tts.google_say
-       data:
-         message: "A ventoinha foi ligada"
+     service: homeassistant.turn_on
+     entity_id: switch.living_room_ventilation
 
 
-
- - alias: Tomar Mediacamento
+ - alias: Alerta Mediacacao
    trigger:
      platform: time
-     after: '22:20:00'
+     after: '20:00:00'
    action:
      - service: tts.google_say
        data:
-         message: "Atenção! Hora de tomar a medicação para a tensão arterial"
+         message: "Atenção! São oito horas, está na hora de tomar a medicação!"
 
 
 
@@ -195,13 +190,13 @@ automation:
    trigger: 
      - platform: state
        entity_id: sensor.living_room_door_state
-       to: '1'
+       state: '1'
      - platform: state
-       entity_id: sensor.room_window_state
-       to: '1'
+       entity_id: sensor.living_room_window_state
+       state: '1'
      - platform: state
        entity_id: sensor.living_room_pir_level
-       to: '1'
+       state: '1'
    condition: 
      - condition: state
        entity_id: switch.alarm
@@ -244,7 +239,7 @@ automation:
    condition:
      - condition: state
        entity_id: switch.living_room_ventilation
-       state: '1'
+       state: 'on'
    trigger:
      platform: numeric_state
      entity_id: sensor.living_room_temperature
@@ -255,6 +250,10 @@ automation:
 
 
  - alias: Lum ON
+   condition: 
+     - condition: state
+       entity_id: sensor.living_room_pir_level
+       state: '1'
    trigger: 
      platform: state
      entity_id: sensor.living_room_light_level
@@ -292,7 +291,7 @@ automation:
    trigger:
      platform: state
      entity_id: sensor.kitchen_flame_level
-     state: 'Air Safe'
+     state: 'Safe'
    action:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
@@ -317,7 +316,7 @@ automation:
    trigger:
      platform: state
      entity_id: sensor.kitchen_water_level
-     state: 'dry      '
+     state: 'dry '
    action:
      service: homeassistant.turn_off
      entity_id: switch.buzzer
@@ -509,6 +508,6 @@ automation:
    action:
      - service: notify.notifygmail
        data:
-         message: "Home Entrance Door!!!"
+         message: "Someone at the door! Go to http://smarthomeddns1.ddns.net:8080 to check!"
 
 group: !include groups.yaml
